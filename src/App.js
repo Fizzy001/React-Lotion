@@ -1,5 +1,16 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./Layout";
+
 function App() {
-  return <h1>Lotion</h1>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+        <Route path="/note" element={<Navbar />}></Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App;
