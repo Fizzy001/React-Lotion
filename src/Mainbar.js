@@ -1,44 +1,29 @@
 import ReactQuill from 'react-quill';
 import "react-quill/dist/quill.snow.css";
 import React, { useState, useRef, useEffect} from "react";
+import { useNavigate, useOutletContext } from "react-router-dom"; 
+import { useContext } from 'react';
 
-function Mainbar({activeNote, updateNote}){
-    //Reactquill Stuff
-    const modules = {
-        toolbar: [
-          [{ 'header': [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline','strike', 'blockquote'],
-          [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-          ['link', 'image'],
-          ['clean']
-        ],
-      };
+function Mainbar(){
     
-      const formats = [
-        'header',
-        'bold', 
-        'italic', 
-        'underline', 
-        'strike', 
-        'blockquote',
-        'list', 
-        'bullet', 
-        'indent',
-        'link', 
-        'image'
-      ];
-      const options = {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-    };
+    const [notes, getActive, setNotes, updateNote, activeNote] = useOutletContext();
+    
+    const direction = useNavigate();
+
+    const [text_header, setTextHeader] = useState("");
+    const [text_body, setTextBody] = useState("");
+
+    useEffect(()=> {
+        setTextHeader(activeNote ? activeNote["title"] : "")
+      }, [activeNote])
+
+      useEffect(() =>{
+        setTextBody(activeNote ? activeNote["body"] : "")
+      }, [activeNote])
     
     //Date
     const formatDate = () => {
-        const formatted = new Date(Date.now()).toLocaleString("en-US", options);
+        const formatted = new Date(Date.now()).toLocaleString("en-US", {hour:"2-digit", minute: "2-digit", second: "2-digit",});
         if (formatted === "Invalid Date") { 
           return "";
         }
@@ -48,10 +33,22 @@ function Mainbar({activeNote, updateNote}){
     //Active Notes
     const editField = (key, value)=>{
         updateNote({
+            activeNote,
             [key]: value,
             lastModified: Date.now(),
         })
     };
+
+    useEffect(()=> {
+        setTextHeader(activeNote ? activeNote["title"] : "")
+      }, [activeNote])
+
+    //Save Notes
+    const onSave = () =>{
+        direction(`/note/view/${activeNote}`, {replace:true});
+    }
+
+    var foundNote = notes.find((note) => note.id === activeNote);
 
     if(!activeNote) return <div className="Noteplacetwo">Select a note, or create a new one</div>
 
@@ -60,21 +57,19 @@ function Mainbar({activeNote, updateNote}){
                     <input
                     id="title"
                     type="text"
-                    value={activeNote.title}
-                    onChange={(event) => editField("title", event.target.value)}
+                    value={foundNote.title}
+                    onChange={(event) => setTextHeader("title", event.target.value)}
                     />
-                    <button>Save</button>
+                    <button onClick={onSave}>Save</button>
                     <button>Delete</button>
                 </div>
 
                 <input className="editor-time" type="datetime-local" onChange={formatDate} />
-                    <ReactQuill id="editor-body"
+                    <ReactQuill id="body"
                             theme="snow"
-                            modules={modules}
-                            formats={formats}
                             placeholder="Your Note Here"
-                            value={activeNote.body}
-                            onChange={(event) => editField("editor-body", event.target.value)}
+                            value={foundNote.body}
+                            onChange={(event) => editField("body", event.target.value)}
                             />
             </div>
 }

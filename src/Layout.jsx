@@ -1,17 +1,21 @@
-import React, { useState, useRef} from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { Outlet } from "react-router-dom";
 import uuid from "react-uuid";
 import Sidebar from "./Sidebar";
 import Mainbar from "./Mainbar";
 
 
-function Navbar(){
+function Layout(){
     //Toggle sidebar
     const [show, toggleShow] = React.useState(true);
     const rightPart = show ? "right" : "rightFull";
 
     //Sidebar Note writing
-    const[notes, setNotes] = useState([])
+    const[notes, setNotes] = useState([] || JSON.parse(localStorage.notes));
+
+    useEffect(() => {
+        localStorage.setItem("notes", JSON.stringify(notes));
+    }, [notes]);
 
     //Sidebar Adding Notes
     const addNotes = () =>{
@@ -49,6 +53,7 @@ function Navbar(){
 
         setNotes(updatedNoteArray);
     }
+
     return<>
     <nav>
         <button onClick={() => toggleShow(!show)}>&#9776;</button>
@@ -57,10 +62,9 @@ function Navbar(){
             <div id="subtext">Like Notion, but worse</div>
         </div>
     </nav>
-    {show &&<div><Sidebar notes={notes} addNotes={addNotes} deleteNote={deleteNote} activeNote={activeNote} activateNote={activateNote}/></div>}
-    <div><Outlet/></div>
-    <div className={rightPart}><Mainbar activeNote={getActive} setNotes={setNotes} updateNote={updateNote}/></div>
+    {show &&<div><Sidebar notes={notes} addNotes={addNotes} deleteNote={deleteNote} activeNote={activeNote} activateNote={activateNote} /></div>}
+    <div className={rightPart}><Outlet context = {[notes, getActive, setNotes, updateNote, activeNote]}/></div>
     </>
 }
 
-export default Navbar;
+export default Layout;

@@ -1,6 +1,14 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 function Sidebar({notes, addNotes, deleteNote, activeNote, activateNote}){
-    //const blueHover = note.id === activeNote ? "left-note" : "left-note active";
-    
+    const direction = useNavigate();
+
+    const divClick = (event) =>{
+        activateNote(event)
+        direction(`/note/edit/${activeNote}`, {replace: true})
+    }
+
     return <div className="left">
         <div className="left-side-header">
             <nav>
@@ -10,7 +18,7 @@ function Sidebar({notes, addNotes, deleteNote, activeNote, activateNote}){
         </div>
         <div className="left-list">
             {notes.map((note) =>(
-                <div className={note.id === activeNote ? "left-note active" : "left-note"} onClick={() => activateNote(note.id)}>
+                <div className={note.id === activeNote ? "left-note active" : "left-note"} onClick={() => divClick(note.id)}>
                     <div className="left-note-title">
                         <strong>{note.title}</strong>
                         <button onClick={() => deleteNote(note.id)}>Delete</button>
