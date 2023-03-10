@@ -23,15 +23,17 @@ nav {
   font-family: sans-serif;
 }
 
-nav label{
+nav button{
   display: block;
   justify-content: left;
   font-size: large;
   font-weight: bold;
   padding: 1%;
+  border: none;
+  background-color: white;
 }
 
-nav label:hover{
+nav button:hover{
   background-color: rgb(115, 6, 170);
   padding: 1%;
 }
@@ -57,16 +59,74 @@ nav h1{
   height: max-content;
 }
 
-#left{
+.left{
   flex: 1;
-  position:fixed;
+  position:absolute;
   width:20%;
   border-right: #D3D3D3 1px solid;
   font-family: sans-serif;
   height: 100%;
 }
 
-#right{
+.right{
   flex:1;
+  margin-left: 20%;
 }
 
+#rightFull{
+  flex:auto;
+  height: 100%;
+  width: 100%;
+}
+
+#Noteplace{
+  text-align: center;
+  padding-top: 20px;
+  color: gray;
+}
+
+.Noteplacetwo{
+  text-align: center;
+  padding-top: 25%;
+  color: gray;
+  font-size: x-large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#text-editor{
+  height: 100%;
+}
+
+.editor-header input {
+  height: 50px;
+  width:80%;
+  border: 0;
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.editor-time{
+  border:0;
+}
+
+.left-note{
+  height: 70px;
+}
+
+.left-note:hover{
+  background-color: gray;
+}
+
+.left-note.active{
+  background-color: aqua;
+}
+
+.text-editor{
+  border-bottom:none;
+}
+
+#editor-body{
+  height:70vh;
+}
